@@ -12,7 +12,7 @@ The main functionalities of **BEAR** are the following :
 ### Variables
 BEAR supports a set of user-defined variables as inputs and provides an OpenAI Gym interface. Here is a table of all settings that users could modify:
 <div align="center">
-  <img src="images/variable.PNG" width=40%><br><br>
+  <img src="Images/variable.PNG" width=80%><br><br>
 </div>
 ### Simplifications
 BEAR enables an automated pipeline to process building geometry, weather and occupancy information to a composable RL environment. Compared to the actual building model, our model makes several simplifications regarding the zone shape, the window/door open schedules, and the shadowing function. Detailed model assumptions are listed below:
