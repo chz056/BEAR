@@ -41,7 +41,7 @@ $Q_p= c_1+c_2m+c_3m^2+c_4\bar{T}-c_5\bar{T}m+c_6\bar{T}m^2-c_7\bar{T}^2+c_8\bar{
 
 ## Example
 <div align="center">
-  <img src="Images/rp19sv2.PNG" width=80%><br><br>
+  <img src="Images/rp19sv2.png" width=80%><br><br>
 </div>
 ## Installation
 
