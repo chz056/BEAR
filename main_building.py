@@ -24,22 +24,23 @@ from stable_baselines3.common.env_util import make_vec_env
 import matplotlib.pyplot as plt
 #In the table, search 'Construction CTF' ThermalConductance or 'HeatTransfer Surface' U nofilm value
 
-#Building=['__________filename__________', [intwall,floor,outwall,roof,ceiling,groundfloor]].
-Buildinglist=[['ASHRAE901_ApartmentHighRise_STD2019_Tucson.table.htm',[6.299,3.285,0.384,0.228,3.839,0.287]]
-,['ASHRAE901_ApartmentMidRise_STD2019_Tucson.table.htm',[6.299,3.285,0.384,0.228,3.839,0.287]]
-,['ASHRAE901_Hospital_STD2019_Tucson.table.htm',[6.299,3.839,0.984,0.228,3.839,3.285]]
-,['ASHRAE901_HotelLarge_STD2019_Tucson.table.htm',[6.299,0.228,0.984,0.228,0.228,2.705]]
-,['ASHRAE901_HotelSmall_STD2019_Tucson.table.htm',[6.299,3.839,0.514,0.228,3.839,0.1573]]
-,['ASHRAE901_OfficeLarge_STD2019_Tucson.table.htm',[6.299,3.839,0.984,0.228,4.488,3.839]]
-,['ASHRAE901_OfficeMedium_STD2019_Tucson.table.htm',[6.299,3.839,0.514,0.228,4.488,0.319]]
-,['ASHRAE901_OfficeSmall_STD2019_Tucson.table.htm',[6.299,3.839,0.514,0.228,4.488,0.319]]
-,['ASHRAE901_OutPatientHealthCare_STD2019_Tucson.table.htm',[6.299,3.839,0.514,0.228,3.839,0.5650E-02]]
-,['ASHRAE901_RestaurantFastFood_STD2019_Tucson.table.htm',[6.299,0.158,0.547,4.706,0.158,0.350]]
-,['ASHRAE901_RestaurantSitDown_STD2019_Tucson.table.htm',[6.299,0.158,0.514,4.706,0.158,0.194]]
-,['ASHRAE901_RetailStandalone_STD2019_Tucson.table.htm',[6.299,0.047,0.984,0.228,0.228,0.047]]
-,['ASHRAE901_RetailStripmall_STD2019_Tucson.table.htm',[6.299,0.1125,0.514,0.228,0.228,0.1125]]
-,['ASHRAE901_SchoolPrimary_STD2019_Tucson.table.htm',[6.299,0.144,0.514,0.228,0.228,0.144]]
-,['ASHRAE901_SchoolSecondary_STD2019_Tucson.table.htm',[6.299,3.839,0.514,0.228,3.839,0.144]]]
+#Building=['__________filename__________', [intwall,floor,outwall,roof,ceiling,groundfloor,window]].
+Buildinglist=[['ASHRAE901_ApartmentHighRise_STD2019_Tucson.table.htm',[6.299,3.285,0.384,0.228,3.839,0.287,2.786]]
+,['ASHRAE901_ApartmentMidRise_STD2019_Tucson.table.htm',[6.299,3.285,0.384,0.228,3.839,0.287,2.786]]
+,['ASHRAE901_Hospital_STD2019_Tucson.table.htm',[6.299,3.839,0.984,0.228,3.839,3.285,2.615]]
+,['ASHRAE901_HotelLarge_STD2019_Tucson.table.htm',[6.299,0.228,0.984,0.228,0.228,2.705,2.615]]
+,['ASHRAE901_HotelSmall_STD2019_Tucson.table.htm',[6.299,3.839,0.514,0.228,3.839,0.1573,2.615]]
+,['ASHRAE901_OfficeLarge_STD2019_Tucson.table.htm',[6.299,3.839,0.984,0.228,4.488,3.839,2.615]]
+,['ASHRAE901_OfficeMedium_STD2019_Tucson.table.htm',[6.299,3.839,0.514,0.228,4.488,0.319,2.615]]
+,['ASHRAE901_OfficeSmall_STD2019_Tucson.table.htm',[6.299,3.839,0.514,0.228,4.488,0.319,2.615]]
+,['ASHRAE901_OutPatientHealthCare_STD2019_Tucson.table.htm',[6.299,3.839,0.514,0.228,3.839,0.5650E-02,2.615]]
+,['ASHRAE901_RestaurantFastFood_STD2019_Tucson.table.htm',[6.299,0.158,0.547,4.706,0.158,0.350,2.557]]
+,['ASHRAE901_RestaurantSitDown_STD2019_Tucson.table.htm',[6.299,0.158,0.514,4.706,0.158,0.194,2.557]]
+,['ASHRAE901_RetailStandalone_STD2019_Tucson.table.htm',[6.299,0.047,0.984,0.228,0.228,0.047,3.695]]
+,['ASHRAE901_RetailStripmall_STD2019_Tucson.table.htm',[6.299,0.1125,0.514,0.228,0.228,0.1125,3.695]]
+,['ASHRAE901_SchoolPrimary_STD2019_Tucson.table.htm',[6.299,0.144,0.514,0.228,0.228,0.144,2.672]]
+,['ASHRAE901_SchoolSecondary_STD2019_Tucson.table.htm',[6.299,3.839,0.514,0.228,3.839,0.144,2.672]]
+,['ASHRAE901_Warehouse_STD2019_Tucson.table.htm',[0.774,0.1926,1.044,0.5892,10.06,0.1926,2.557]]]
 
 #12 month GroundTemperature dictionary.
 GroundTemp_dic={'Albuquerque':[13.7,7.0,2.1,2.6,4.3,8.8,13.9,17.8,23.2,25.6,24.1,20.5],
