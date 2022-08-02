@@ -2,6 +2,9 @@ import numpy as np
 import os
 from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.results_plotter import load_results, ts2xy, plot_results
+import pvlib
+import pandas as pd
+from scipy import interpolate
 
 
 def Getroominfor(filename):
@@ -57,11 +60,11 @@ def Getroominfor(filename):
             #Zmax
             if (count - 51) % 32 == 0 and count != 19:
                 linestr = str(line)
-                cord.append(float(linestr[22:-6]))  
+                cord.append(float(linestr[22:-6]))
             #FloorArea
             if (count - 56) % 32 == 0 and count != 24:
                 linestr = str(line)
-                cord.append(float(linestr[22:-6])) 
+                cord.append(float(linestr[22:-6]))
             #ExteriorNetArea
             if (count - 58) % 32 == 0 and count != 26:
                 linestr = str(line)
@@ -159,10 +162,10 @@ def Nfind_neighbor(roomnum,Layerall,U_Wall,SpecificHeat_avg):
           x2max=[float(nextcord[j][3]),float(nextcord[j][5])]
           if checkconnect_layer(x2min,x2max,x1min,x1max)or checkconnect_layer(x1min,x1max,x2min,x2max):
             crossarea=(min(x1max[1],x2max[1])-max(x1min[1],x2min[1]))*(min(x1max[0],x2max[0])-max(x1min[0],x2min[0]))
-            
+
             U = crossarea*(Floor*Ceiling/(Floor+Ceiling))
             # U = crossarea*((Ceiling))
-            
+
             Rtable[nextcord[j][11],cordall[i][11]]=U
             Rtable[cordall[i][11],nextcord[j][11]]=U
             if cordall[i][0] in dicRoom:
@@ -185,16 +188,16 @@ def Nfind_neighbor(roomnum,Layerall,U_Wall,SpecificHeat_avg):
       if cordall[i][9]>0 or (i==len(cordall)-1):
         if i==len(cordall)-1:
           Rtable[cordall[i][11],-1]= cordall[i][9]*OutWall+xleng*yleng*OutRoof+cordall[i][10]*Window
-   
-          
+
+
         else:
           Rtable[cordall[i][11],-1]= cordall[i][9]*OutWall+cordall[i][10]*Window
-        
+
 
         if cordall[i][0] in dicRoom:
           dicRoom[cordall[i][0]].append(outind)
         else:
-          dicRoom[cordall[i][0]]=[outind]    
+          dicRoom[cordall[i][0]]=[outind]
       for j in range(i+1,FloorRoom_num):
         x1min=[float(cordall[i][2]),float(cordall[i][4])]
         x1max=[float(cordall[i][3]),float(cordall[i][5])]
@@ -212,7 +215,7 @@ def Nfind_neighbor(roomnum,Layerall,U_Wall,SpecificHeat_avg):
           if cordall[j][0] in dicRoom:
             dicRoom[cordall[j][0]].append(cordall[i][11])
           else:
-            dicRoom[cordall[j][0]]=[cordall[i][11]]  
+            dicRoom[cordall[j][0]]=[cordall[i][11]]
   return dicRoom,Rtable,Ctable,Windowtable
 
 
@@ -274,12 +277,12 @@ def ParameterGenerator(Building,Weather,Location,U_Wall=0,Ground_Tp=0,
       full_occ:nparray with shape (roomnum,1), max number of people occupy a room
       max_power:int,maximum power of a single hvac output,unit watts
       AC_map:nparray∈[0,1] with shape(roomnum,),boolean of whether a zone has AC
-      time_reso:int, determine the length of 1 timestep, unit second 
+      time_reso:int, determine the length of 1 timestep, unit second
       reward_gamma:list of two, [energy penalty,temperature error penalty]
       target:nparray with shape (roomnum,), target temperature setpoints for each zone
       activity_sch:nparray with shape(length of the simulation,), the activity schedule of people in the building,unit watts/person
 
-    """  
+    """
     Building_dic={'ApartmentHighRise':['ASHRAE901_ApartmentHighRise_STD2019_Tucson.table.htm',[6.299,3.285,0.384,0.228,3.839,0.287,2.786]]
     ,'ApartmentMidRise':['ASHRAE901_ApartmentMidRise_STD2019_Tucson.table.htm',[6.299,3.285,0.384,0.228,3.839,0.287,2.786]]
     ,'Hospital':['ASHRAE901_Hospital_STD2019_Tucson.table.htm',[6.299,3.839,0.984,0.228,3.839,3.285,2.615]]
@@ -331,7 +334,7 @@ def ParameterGenerator(Building,Weather,Location,U_Wall=0,Ground_Tp=0,
             'Cold_Dry':'USA_MT_Great.Falls.Intl.AP.727750_TMY3.epw',
             'Very_Cold':'USA_MN_International.Falls.Intl.AP.727470_TMY3.epw',
             'Subarctic/Arctic':'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw'}
-    
+
     if Location not in GroundTemp_dic:
       city = Ground_Tp
     else:
@@ -350,7 +353,7 @@ def ParameterGenerator(Building,Weather,Location,U_Wall=0,Ground_Tp=0,
     if Weather not in weather_dic:
       weatherfile = [Weather,groundtemp]
     else:
-      weatherfile=[weather_dic[Weather],groundtemp] 
+      weatherfile=[weather_dic[Weather],groundtemp]
 
     Layerall, roomnum, buildall  = Getroominfor(filename)
     print("###############All Zones from Ground############")
@@ -393,7 +396,7 @@ def ParameterGenerator(Building,Weather,Location,U_Wall=0,Ground_Tp=0,
         for number in connect_list:
             connectmap[i][number] = 1
 
-    people_full= np.zeros((roomnum,1))+np.array([full_occ]).T 
+    people_full= np.zeros((roomnum,1))+np.array([full_occ]).T
     ACweight=np.diag(np.zeros(roomnum)+AC_map)* max_power
     # ACweight[-1,-1]=0
     weightcmap = np.concatenate((people_full,ground_connectlist,np.zeros((roomnum, 1)), ACweight, np.array([Windowtable*SHGC]).T), axis=-1)/np.array([Ctable]).T
@@ -408,11 +411,11 @@ def ParameterGenerator(Building,Weather,Location,U_Wall=0,Ground_Tp=0,
     Parameter['weightcmap'] = weightcmap
     Parameter['target'] = np.zeros(roomnum) + target
     Parameter['gamma'] = reward_gamma
-    Parameter['time_resolution']=time_reso 
+    Parameter['time_resolution']=time_reso
     Parameter['ghi'] = solardatanew/(abs(data[1]['TZ'])/60)/ (max(data[0]['ghi'])/(abs(data[1]['TZ'])/60))
     Parameter['GroundTemp'] = weatherfile[1]
     Parameter['Occupancy'] = activity_sch #schedule(maxocc percent)*metobolic power
     Parameter['ACmap']= np.zeros(roomnum)+AC_map
     Parameter['max_power'] = max_power
-    
+
     return Parameter
