@@ -36,6 +36,7 @@ class BuildingEnvReal(gym.Env):
         self.GroundTemp=Parameter['GroundTemp']
         self.Occupancy=Parameter['Occupancy']
         self.acmap=Parameter['ACmap']
+        self.maxpower=Parameter['max_power']
         self.Occupower=0
  
 
@@ -87,7 +88,7 @@ class BuildingEnvReal(gym.Env):
         Y = np.insert(np.append(action,self.ghi[self.epochs]), 0, self.OutTemp[self.epochs]).T
         Y = np.insert(Y, 0, self.GroundTemp[self.epochs]).T
         avg_temp=np.sum(self.state[:self.roomnum])/self.roomnum
-        Meta = self.Occupancy[self.epochs]*1000
+        Meta = self.Occupancy[self.epochs]
         self.Occupower=6.461927+.946892*Meta+.0000255737*Meta**2+7.139322*avg_temp-.0627909*avg_temp*Meta+.0000589172*avg_temp*Meta**2-.19855*avg_temp**2+.000940018*avg_temp**2*Meta-.00000149532*avg_temp**2*Meta**2
 
         Y = np.insert(Y, 0, self.Occupower).T
@@ -111,9 +112,10 @@ class BuildingEnvReal(gym.Env):
         self.rewardsum += reward
 
         info = {}
-        self.state = np.concatenate((X_new, self.OutTemp[self.epochs].reshape(-1,),self.ghi[self.epochs].reshape(-1),self.GroundTemp[self.epochs].reshape(-1),np.array([Meta/1000])), axis=0)
+        # np.array([Meta/1000])
+        self.state = np.concatenate((X_new, self.OutTemp[self.epochs].reshape(-1,),self.ghi[self.epochs].reshape(-1),self.GroundTemp[self.epochs].reshape(-1),np.array([self.Occupower/1000])), axis=0)
         self.statelist.append(self.state)
-        self.actionlist.append(action)
+        self.actionlist.append(action*self.maxpower)
 
         self.epochs += 1
         # if self.counter == 10000:
@@ -127,36 +129,22 @@ class BuildingEnvReal(gym.Env):
 
     def reset(self):
         # self.epochs = random.randrange(self.length_of_weather)
-        self.epochs = 24*10
+        self.epochs = 0
         self.statelist = []
         self.actionlist=[]
         self.state = np.ones(self.roomnum+4)*22
         # self.state = np.random.uniform(21,23, self.roomnum+4)
         avg_temp=np.sum(self.state[:self.roomnum])/self.roomnum
-        Meta = self.Occupancy[self.epochs]*1000
+        Meta = self.Occupancy[self.epochs]
         self.Occupower=6.461927+.946892*Meta+.0000255737*Meta**2+7.139322*avg_temp-.0627909*avg_temp*Meta+.0000589172*avg_temp*Meta**2-.19855*avg_temp**2+.000940018*avg_temp**2*Meta-.00000149532*avg_temp**2*Meta**2
+        self.state=np.concatenate((self.state[:self.roomnum], self.OutTemp[self.epochs].reshape(-1,),self.ghi[self.epochs].reshape(-1),self.GroundTemp[self.epochs].reshape(-1),np.array([self.Occupower/1000])), axis=0)
   
         self.flag=1
         self.rewardsum = 0
         print("Reset", self.state)
         
         return self.state
-    def resetest(self):
-        # self.epochs = random.randrange(self.length_of_weather)
-        self.epochs = 0
-        self.statelist = []
-        self.actionlist=[]
-        self.state = np.ones(self.roomnum+4)*22
-        # self.state = np.random.uniform(20,23.5, self.roomnum+1)
-        avg_temp=np.sum(self.state[:self.roomnum])/self.roomnum
-        Meta = self.Occupancy[self.epochs]*1000
-        self.Occupower=6.461927+.946892*Meta+.0000255737*Meta**2+7.139322*avg_temp-.0627909*avg_temp*Meta+.0000589172*avg_temp*Meta**2-.19855*avg_temp**2+.000940018*avg_temp**2*Meta-.00000149532*avg_temp**2*Meta**2
-        self.flag=1
-        self.rewardsum = 0
-     
-        print("Reset for Testing", self.state)
-        
-        return self.state
+
     def render(self, mode='human'):
         pass
 
