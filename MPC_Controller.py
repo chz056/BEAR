@@ -14,12 +14,12 @@ class MPCAgent(object):
         self.B_d=environment.B_d
         self.temp=environment.OutTemp[environment.epochs]
         self.acmap=environment.acmap
- 
+
         self.GroundTemp=environment.GroundTemp[environment.epochs]
         # self.Occupancy=environment.Occupancy[environment.epochs]
         self.Occupancy=environment.Occupower
         self.ghi=environment.ghi[environment.epochs]
-        self.target=env.target
+        self.target=environment.target
 
         self.problem=None
 
@@ -65,7 +65,7 @@ class MPCAgent(object):
                       #  cp.norm(u[:,t],1) <=9000/400,
                       #  u[:,t]@np.ones(self.num_of_state) >=-900/400,
                        ]
-            
+
             obj += self.gamma[1]*cp.norm(cp.multiply(x[:, t],self.acmap) - x_desired*self.acmap, 2)+self.gamma[0]*24*cp.norm(u[:, t],2)
             #obj += cp.norm(u[:,t],2)
         # constr+=[u[5,9]<=0.1]
