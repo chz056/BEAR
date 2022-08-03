@@ -7,7 +7,7 @@ BEAR is a physics based Building Environment for Control and Reinforcement Learn
 ## Usage example
 Two examples "QuickStart" and "CustomizeModel_example" are provided for demonstration in Google Colab. Try it out [**HERE**.](https://drive.google.com/drive/folders/1-pFR1-RfhM8UiN2fmBra883NlP1RF1Qj?usp=sharing)
 
-*Quick reminder: Download the folder "GEAR" and upload it to your Drive in "My Drive", then run the cells.*
+*Quick reminder: Download the folder "BEAR" and upload it to your Drive in "My Drive", then run the cells.*
 ## Functionalities
 The main functionalities of **BEAR** are the following :
   - **Create environment**
