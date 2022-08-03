@@ -20,7 +20,7 @@ BEAR supports a set of user-defined variables as inputs and provides an OpenAI G
 </div>
 
 ### Buildings
-For creating a large variety of building models, GEAR includes 16 different types of building at 19 locations. Here are lists of available buildings, weathers, and locations:
+For creating a large variety of building models, BEAR includes 16 different types of building at 19 locations. Here are lists of available buildings, weathers, and locations:
    |**Building types**|**Weather types** | **Locations** |                 
    | ------------- |   ------------- | ------------- |                
    | ApartmentHighRise | Very_Hot_Humid | Albuquerque |             
@@ -44,7 +44,7 @@ For creating a large variety of building models, GEAR includes 16 different type
    |           |            |Tucson | 
 
 ### RL algorithms
-Researchers from the machine learning and reinforcement learning community can design new environments and algorithms with minimal knowledge of the underlying dynamics and models and thus can focus more on algorithm development and evaluation. Gear provides an OpenAI Gym interface. Users can perform simulations in the customized environment with any classic model-based control or learning-based controllers. Examples are shown in the google colab notebook.
+Researchers from the machine learning and reinforcement learning community can design new environments and algorithms with minimal knowledge of the underlying dynamics and models and thus can focus more on algorithm development and evaluation. BEAR provides an OpenAI Gym interface. Users can perform simulations in the customized environment with any classic model-based control or learning-based controllers. Examples are shown in the google colab notebook.
  
 ### Simplifications
 BEAR enables an automated pipeline to process building geometry, weather and occupancy information to a composable RL environment. Compared to the actual building model, our model makes several simplifications regarding the zone shape, the window/door open schedules, and the shadowing function. Detailed model assumptions are listed below:
