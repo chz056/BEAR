@@ -16,24 +16,26 @@ class MPCAgent(object):
         self.acmap=environment.acmap
 
         self.GroundTemp=environment.GroundTemp[environment.epochs]
-        # self.Occupancy=environment.Occupancy[environment.epochs]
-        self.Occupancy=environment.Occupower
+
+        self.Occupancy=environment.Occupancy[environment.epochs]
         self.ghi=environment.ghi[environment.epochs]
         self.target=environment.target
+        self.spacetype = environment.spacetype
 
         self.problem=None
 
     def predict(self, environment):
-        #current_state = environment.simulator.state
+
+
         self.A_d=environment.A_d
         self.B_d=environment.B_d
         self.temp=environment.OutTemp[environment.epochs]
         self.GroundTemp=environment.GroundTemp[environment.epochs]
-        # self.Occupancy=environment.Occupancy[environment.epochs]
 
-        self.Occupancy=environment.Occupower
+
+        self.Occupancy=environment.Occupancy[environment.epochs]
         self.ghi=environment.ghi[environment.epochs]
-        # print('OC',self.Occupancy)
+
 
         action=np.zeros((self.num_of_action))
 
@@ -45,37 +47,40 @@ class MPCAgent(object):
         u = cp.Variable((self.num_of_action, self.planning_steps), name='u')
 
         x0.value = environment.state[:self.num_of_state]
+
+
         u_max.value = 1.0*np.ones((self.num_of_action,))
         u_min.value = -1.0 * np.ones((self.num_of_action,))
 
-        # x_desired=22*np.ones((self.num_of_state))
+
         x_desired=self.target
 
         obj = 0
         constr = [x[:, 0] == x0]
-        # print(np.shape(self.A_d))
-        # print(self.num_of_state)
+
+        avg_temp=np.sum(x0.value)/self.num_of_state
+        Meta = self.Occupancy
+
+        self.Occupower=6.461927+0.946892*Meta+0.0000255737*Meta**2 - 0.0627909*avg_temp*Meta+0.0000589172*avg_temp*Meta**2 - 0.19855*avg_temp**2+0.000940018*avg_temp**2*Meta - 0.00000149532*avg_temp**2*Meta**2
+
 
         a=self.B_d[:,3:-1]@ u[:, 0]
         for t in range(self.planning_steps):
-            constr += [x[:, t + 1] == self.A_d@ x[:, t].T + self.B_d[:,3:-1]@ u[:, t]+ self.B_d[:,2]*self.temp+self.B_d[:,1]*self.GroundTemp+self.B_d[:,0]*self.Occupancy+self.B_d[:,-1]*self.ghi,
+            constr += [x[:, t + 1] == self.A_d@ x[:, t].T + self.B_d[:,3:-1]@ u[:, t]+ self.B_d[:,2]*self.temp+self.B_d[:,1]*self.GroundTemp+self.B_d[:,0]*self.Occupower+self.B_d[:,-1]*self.ghi,
                        u[:, t] <= u_max,
                        u[:, t] >= u_min,
-                      #  u[-1,t] ==0,
-                      #  cp.norm(u[:,t],1) <=9000/400,
-                      #  u[:,t]@np.ones(self.num_of_state) >=-900/400,
                        ]
 
             obj += self.gamma[1]*cp.norm(cp.multiply(x[:, t],self.acmap) - x_desired*self.acmap, 2)+self.gamma[0]*24*cp.norm(u[:, t],2)
-            #obj += cp.norm(u[:,t],2)
-        # constr+=[u[5,9]<=0.1]
-        # constr += [u <= x[:, :-1]]
+
         prob = cp.Problem(cp.Minimize(obj), constr)
-        # prob.solve()
+
         prob.solve(solver='ECOS_BB')
-        # print('??',cp.norm(u[:, 1],2).value*400)
-        # print('?2?',x[:, 1].value)
+
         state=x[:, 1].value
-        action=u.value[:,0]
+        if self.spacetype == 'continuous':
+          action=u.value[:,0]
+        else:
+          action=(u.value[:,0]*100).astype(int)
 
         return action,state
