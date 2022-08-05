@@ -264,7 +264,7 @@ class SaveOnBestTrainingRewardCallback(BaseCallback):
 def ParameterGenerator(Building,Weather,Location,U_Wall=0,Ground_Tp=0,
                        shgc=0.252,shgc_weight=0.01,ground_weight=0.5,full_occ=0,
                        max_power=8000,AC_map=1,time_reso=3600,reward_gamma=[0.001,0.999],
-                       target=22,activity_sch=np.ones(100000000)*1*120):
+                       target=22,activity_sch=np.ones(100000000)*1*120,temp_range=[-40,40],spacetype='continuous'):
     """
     This function could generate parameters from the selected building and temperature file for the env.
     Input:
@@ -369,9 +369,9 @@ def ParameterGenerator(Building,Weather,Location,U_Wall=0,Ground_Tp=0,
 
     f = interpolate.interp1d(x, y)
     xnew = np.arange(0, num_datapoint-1, 1/3600*time_reso)
-    outtempdatanew = f(xnew)   # use interpolation function returned by `interp1d`]
+    outtempdatanew = f(xnew)
 
-    oneyearrad=data[0]['ghi'] #[5088:]8-12yue#[2882:]5yue#[4344:]7yue
+    oneyearrad=data[0]['ghi']
     x = np.arange(0, num_datapoint)
     y = np.array(oneyearrad)
 
@@ -383,6 +383,7 @@ def ParameterGenerator(Building,Weather,Location,U_Wall=0,Ground_Tp=0,
     SpecificHeat_avg = 1000
     SHGC=shgc*shgc_weight*(max(data[0]['ghi'])/(abs(data[1]['TZ'])/60))
     dicRoom,Rtable,Ctable,Windowtable=Nfind_neighbor(roomnum,Layerall,U_Wall,SpecificHeat_avg)
+
     connectmap=np.zeros((roomnum,roomnum+1))
     RCtable=Rtable/np.array([Ctable]).T
     ground_connectlist=np.zeros((roomnum,1)) #list to see which room connects to the ground
@@ -398,8 +399,9 @@ def ParameterGenerator(Building,Weather,Location,U_Wall=0,Ground_Tp=0,
 
     people_full= np.zeros((roomnum,1))+np.array([full_occ]).T
     ACweight=np.diag(np.zeros(roomnum)+AC_map)* max_power
-    # ACweight[-1,-1]=0
+
     weightcmap = np.concatenate((people_full,ground_connectlist,np.zeros((roomnum, 1)), ACweight, np.array([Windowtable*SHGC]).T), axis=-1)/np.array([Ctable]).T
+    nonlinear= people_full/np.array([Ctable]).T
 
 
 
@@ -414,8 +416,11 @@ def ParameterGenerator(Building,Weather,Location,U_Wall=0,Ground_Tp=0,
     Parameter['time_resolution']=time_reso
     Parameter['ghi'] = solardatanew/(abs(data[1]['TZ'])/60)/ (max(data[0]['ghi'])/(abs(data[1]['TZ'])/60))
     Parameter['GroundTemp'] = weatherfile[1]
-    Parameter['Occupancy'] = activity_sch #schedule(maxocc percent)*metobolic power
+    Parameter['Occupancy'] = activity_sch
     Parameter['ACmap']= np.zeros(roomnum)+AC_map
     Parameter['max_power'] = max_power
+    Parameter['nonlinear'] = nonlinear
+    Parameter['temp_range'] = temp_range
+    Parameter['spacetype'] = spacetype
 
     return Parameter
