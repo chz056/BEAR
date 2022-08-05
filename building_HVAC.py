@@ -31,12 +31,15 @@ class BuildingEnvReal(gym.Env):
         self.roomnum = Parameter['roomnum']
         self.weightCmap = Parameter['weightcmap']
         self.target = Parameter['target']
-        self.gamma=Parameter['gamma']
+        self.gamma=Parameter['gamma'] #Discount factor for reward, change this one later
         self.ghi=Parameter['ghi']
         self.GroundTemp=Parameter['GroundTemp']
         self.Occupancy=Parameter['Occupancy']
         self.acmap=Parameter['ACmap']
         self.maxpower=Parameter['max_power']
+        self.nonlinear=Parameter['nonlinear']
+        self.temp_range=Parameter['temp_range']
+        self.spacetype=Parameter['spacetype']
         self.Occupower=0
 
 
@@ -46,9 +49,14 @@ class BuildingEnvReal(gym.Env):
 
 
         self.Qhigh = np.ones(self.roomnum, dtype=np.float32) * (1.0)*self.acmap.astype(np.float32)
-        self.action_space = gym.spaces.Box(self.Qlow, self.Qhigh, dtype=np.float32)
-        self.min_T = -40
-        self.max_T = 40
+
+        if self.spacetype == 'continuous':
+
+          self.action_space = gym.spaces.Box(self.Qlow, self.Qhigh, dtype=np.float32)
+        else:
+          self.action_space = gym.spaces.Box(self.Qlow*100, self.Qhigh*100, dtype=np.int32)
+        self.min_T = self.temp_range[0]
+        self.max_T = self.temp_range[1]
 
 
         self.low = np.ones(self.roomnum+4, dtype=np.float32) * self.min_T
@@ -61,12 +69,17 @@ class BuildingEnvReal(gym.Env):
 
         diagvalue = (-self.RCtable) @ self.connectmap.T - np.array([self.weightCmap.T[1]]).T
         np.fill_diagonal(Amatrix, np.diag(diagvalue))
+
+
+        Amatrix+=self.nonlinear*7.139322/self.roomnum
+
+
         Bmatrix = self.weightCmap.T
 
 
         Bmatrix[2] = self.connectmap[:, -1] * (self.RCtable[:, -1])
 
-        Bmatrix = Bmatrix.T
+        Bmatrix = (Bmatrix.T)
 
         self.rewardsum = 0
         self.statelist = []
@@ -78,8 +91,11 @@ class BuildingEnvReal(gym.Env):
         self.B_d = inv(Amatrix) @ (self.A_d - np.eye(self.A_d.shape[0])) @ Bmatrix
 
 
+
     def step(self, action):
 
+        if self.spacetype != 'continuous':
+          action=action/100
 
         done = False
         X = self.state[:self.roomnum].T
@@ -87,11 +103,12 @@ class BuildingEnvReal(gym.Env):
         Y = np.insert(Y, 0, self.GroundTemp[self.epochs]).T
         avg_temp=np.sum(self.state[:self.roomnum])/self.roomnum
         Meta = self.Occupancy[self.epochs]
-        self.Occupower=6.461927+.946892*Meta+.0000255737*Meta**2+7.139322*avg_temp-.0627909*avg_temp*Meta+.0000589172*avg_temp*Meta**2-.19855*avg_temp**2+.000940018*avg_temp**2*Meta-.00000149532*avg_temp**2*Meta**2
+        self.Occupower=6.461927+0.946892*Meta+0.0000255737*Meta**2 - 0.0627909*avg_temp*Meta+0.0000589172*avg_temp*Meta**2 - 0.19855*avg_temp**2+0.000940018*avg_temp**2*Meta - 0.00000149532*avg_temp**2*Meta**2
 
         Y = np.insert(Y, 0, self.Occupower).T
 
         X_new = self.A_d @ X + self.B_d @ Y
+
 
         reward = 0
 
@@ -109,24 +126,23 @@ class BuildingEnvReal(gym.Env):
 
         self.epochs += 1
 
-
         if self.epochs>=self.length_of_weather-1:
             done=True
-
+            self.epochs=0
 
         return self.state, reward, done, info
 
     def reset(self):
-        # self.epochs = random.randrange(self.length_of_weather)
+
         self.epochs = 0
         self.statelist = []
         self.actionlist=[]
-        self.state = np.ones(self.roomnum+4)*22
-        # self.state = np.random.uniform(21,23, self.roomnum+4)
-        avg_temp=np.sum(self.state[:self.roomnum])/self.roomnum
+        T_initial = self.target
+        # T_initial = np.random.uniform(21,23, self.roomnum+4)
+        avg_temp=np.sum(T_initial)/self.roomnum
         Meta = self.Occupancy[self.epochs]
-        self.Occupower=6.461927+.946892*Meta+.0000255737*Meta**2+7.139322*avg_temp-.0627909*avg_temp*Meta+.0000589172*avg_temp*Meta**2-.19855*avg_temp**2+.000940018*avg_temp**2*Meta-.00000149532*avg_temp**2*Meta**2
-        self.state=np.concatenate((self.state[:self.roomnum], self.OutTemp[self.epochs].reshape(-1,),self.ghi[self.epochs].reshape(-1),self.GroundTemp[self.epochs].reshape(-1),np.array([self.Occupower/1000])), axis=0)
+        self.Occupower=6.461927+0.946892*Meta+0.0000255737*Meta**2- 0.0627909*avg_temp*Meta+0.0000589172*avg_temp*Meta**2 - 0.19855*avg_temp**2+0.000940018*avg_temp**2*Meta - 0.00000149532*avg_temp**2*Meta**2
+        self.state=np.concatenate((T_initial, self.OutTemp[self.epochs].reshape(-1,),self.ghi[self.epochs].reshape(-1),self.GroundTemp[self.epochs].reshape(-1),np.array([self.Occupower/1000])), axis=0)
 
         self.flag=1
         self.rewardsum = 0
