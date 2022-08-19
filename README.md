@@ -21,27 +21,9 @@ BEAR supports a set of user-defined variables as inputs and provides an OpenAI G
 
 ### Buildings
 For creating a large variety of building models, BEAR includes 16 different types of building at 19 locations. Here are lists of available buildings, weathers, and locations:
-   |**Building types**|**Weather types** | **Locations** |                 
-   | ------------- |   ------------- | ------------- |                
-   | ApartmentHighRise | Very_Hot_Humid | Albuquerque |             
-   | ApartmentMidRise |Hot_Humid |Atlanta | 
-   | Hospital |Hot_Dry |Buffalo | 
-   | HotelLarge |Warm_Humid |Denver | 
-   | HotelSmall |Warm_Dry |Dubai | 
-   | OfficeLarge |Warm_Marine |ElPaso | 
-   | OfficeMedium |Mixed_Humid |Fairbanks | 
-   | OfficeSmall |Mixed_Dry |GreatFalls | 
-   | OutPatientHealthCare |Mixed_Marine |HoChiMinh | 
-   | RestaurantFastFood |Cool_Humid |Honolulu | 
-   | RestaurantSitDown |Cool_Dry |InternationalFalls | 
-   | RetailStandalone |Cool_Marine |NewDelhi | 
-   | RetailStripmall |Cold_Humid |NewYork | 
-   | SchoolPrimary |Cold_Dry |PortAngeles | 
-   | SchoolSecondar |Very_Cold |Rochester | 
-   | Warehouse |Subarctic/Arctic |SanDiego | 
-   |           |            |Seattle | 
-   |           |            |Tampa | 
-   |           |            |Tucson | 
+<div align="center">
+  <img src="Images/Inputs.PNG" width=80%><br><br>
+</div>
 
 ### RL algorithms
 Researchers from the machine learning and reinforcement learning community can design new environments and algorithms with minimal knowledge of the underlying dynamics and models and thus can focus more on algorithm development and evaluation. BEAR provides an OpenAI Gym interface. Users can perform simulations in the customized environment with any classic model-based control or learning-based controllers. Examples are shown in the google colab notebook.
