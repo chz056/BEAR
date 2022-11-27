@@ -1,5 +1,9 @@
 # BEAR
-**Physics-Principled Building Environment for Control and Reinforcement Learning**
+*Physics-Principled Building Environment for Control and Reinforcement Learning*
+
+Authors: Chi Zhang, Yuanyuan Shi and Yize Chen
+
+University of California San Diego, Hong Kong University of Science and Technology
 
 Thank you for choosing BEAR.
 
