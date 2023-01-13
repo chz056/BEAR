@@ -16,7 +16,7 @@ The main functionalities of **BEAR** are the following :
   
   - **Building model**
   <div align="center">
-  <img src="Images/r19f.PNG" width=80%><br><br>
+  <img src="Images/rp19f.PNG" width=80%><br><br>
   </div>
 
   - **RL testbed**
