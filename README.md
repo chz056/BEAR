@@ -10,18 +10,18 @@ Two examples "QuickStart" and "CustomizeModel_example" are provided for demonstr
 ## Functionalities
 The main functionalities of **BEAR** are the following :
   - **Create environment**
-  <div align="center">
-  <img src="Images/code_r.PNG" width=80%><br><br>
+  <div align="left">
+  <img src="Images/code_r.PNG" width=50%><br><br>
   </div>
   
   - **Building model**
-  <div align="center">
+  <div align="left">
   <img src="Images/rp19f.PNG" width=80%><br><br>
   </div>
 
   - **RL testbed**
-  <div align="center">
-  <img src="Images/trainingreward.PNG" width=80%><br><br>
+  <div align="left">
+  <img src="Images/trainingreward.PNG" width=40%><br><br>
   </div>
   
 ### Environment Variables
