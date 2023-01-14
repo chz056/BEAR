@@ -1,7 +1,7 @@
 # BEAR
 **Physics-Principled Building Environment for Control and Reinforcement Learning**
 
-GitHub Homepage: https://github.com/chz056/BEAR
+GitHub Homepage: https://drive.google.com/file/d/1waRMSn92azFNuRoMSylkwgEDk1CpIz2c/view?usp=sharing
 
 Thank you for choosing BEAR.
 
