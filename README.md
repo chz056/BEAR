@@ -1,7 +1,8 @@
 # BEAR
 **Physics-Principled Building Environment for Control and Reinforcement Learning**
 
-GitHub Homepage: [**Home**](https://github.com/chz056/BEAR).
+GitHub Homepage: https://github.com/chz056/BEAR
+
 Thank you for choosing BEAR.
 
 BEAR is a physics based Building Environment for Control and Reinforcement Learning. The platform allows researchers to benchmark both model-based and model-free controllers using a broad collection of standard building models in Python without co-simulation with other building simulators. For implementation convenience, only three elements (building type, weather type, and city) need to be selected by user to create an environment. You can read a detailed presentation of BEAR in our paper:
