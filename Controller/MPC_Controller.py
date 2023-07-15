@@ -8,6 +8,7 @@ class MPCAgent(object):
         self.safety_margin = safety_margin
         self.planning_steps=planning_steps
         self.action_space=environment.action_space
+        self.Qlow=environment.Qlow
         self.num_of_state=environment.roomnum
         self.num_of_action=environment.action_space.shape[0]
         self.A_d=environment.A_d
@@ -81,7 +82,7 @@ class MPCAgent(object):
         if self.spacetype == 'continuous':
           action=u.value[:,0]
         else:
-          action=(u.value[:,0]*100).astype(int)
+          action=(u.value[:,0]*100-self.Qlow*100).astype(int)
 
         return action,state
 class MPCAgent_DataDriven(object):
@@ -165,7 +166,6 @@ class MPCAgent_DataDriven(object):
         if self.spacetype == 'continuous':
           action=u.value[:,0]
         else:
-          action=(u.value[:,0]*100).astype(int)
+          action=(u.value[:,0]*100-self.Qlow*100).astype(int)
 
         return action,state
-
