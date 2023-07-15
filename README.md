@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="Images/LOGO.png" width="400">
+</p>
+
 # BEAR
 *Physics-Principled Building Environment for Control and Reinforcement Learning*
 
