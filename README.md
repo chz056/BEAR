@@ -20,6 +20,46 @@ BEAR is a physics based Building Environment for Control and Reinforcement Learn
 Two examples "QuickStart" and "CustomizeModel_example" are provided for demonstration in Google Colab. Try it out [**HERE**.](https://drive.google.com/drive/folders/1-pFR1-RfhM8UiN2fmBra883NlP1RF1Qj?usp=sharing)
 
 *Quick reminder: Download the folder "BEAR" and upload it to your Drive in "My Drive", then run the cells.*
+## Manual Installation
+
+To manually install BEAR, please follow the steps below:
+
+1. **Clone the Repository**
+
+    Clone the BEAR repository to your local machine:
+    ```
+    git clone https://github.com/chz056/BEAR.git
+    ```
+
+2. **Navigate to the Cloned Directory**
+
+    Change directory to the cloned repository:
+    ```
+    cd BEAR
+    ```
+    
+3. **Install Requirements**
+
+    Install the required Python packages using pip:
+    ```
+    pip install -r requirements.txt
+    ```
+    If you're using a conda environment, you can create a new environment with the required packages using:
+    ```
+    conda create --name myenv --file requirements.txt
+    ```
+
+4. **Run the Main Script**
+
+    Now, you can run the main.py script to start using BEAR:
+    ```
+    python main.py
+    ```
+
+And that's it! You've successfully installed and set up BEAR on your local machine.
+
+Please report any issues with installation or bugs in the code in the [Issues section](https://github.com/chz056/BEAR/issues).
+
 ## Functionalities
 The main functionalities of **BEAR** are the following :
   - **Create environment**
