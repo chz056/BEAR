@@ -51,9 +51,9 @@ To manually install BEAR, please follow the steps below:
 
 4. **Run the Main Script**
 
-    Now, you can run the main.py script to start using BEAR:
+    Now, you can run the quickstart.py script to start using BEAR:
     ```
-    python main.py
+    python quickstart.py
     ```
 
 And that's it! You've successfully installed and set up BEAR on your local machine.
