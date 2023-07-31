@@ -39,15 +39,17 @@ To manually install BEAR, please follow the steps below:
     ```
     
 3. **Install Requirements**
-
+    (Optional) If you plan to use a virtual environment, you can create one using:
+    ```
+    python -m pip install virtualenv
+    python -m venv myenv
+    source myenv/Scripts/activate # on unix-like systems
+    ```
     Install the required Python packages using pip:
     ```
     pip install -r requirements.txt
     ```
-    If you're using a conda environment, you can create a new environment with the required packages using:
-    ```
-    conda create --name myenv --file requirements.txt
-    ```
+
 
 4. **Run the Main Script**
 

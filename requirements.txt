@@ -1,3 +1,5 @@
 sb3_contrib>=2.0.0a1
 stable_baselines3>=2.0.0a1
 pvlib
+scikit-learn
+cvxpy
