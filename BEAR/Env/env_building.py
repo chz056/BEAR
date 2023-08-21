@@ -15,7 +15,7 @@ from scipy.linalg import expm, sinm, cosm
 from numpy.linalg import inv
 
 
-from typing import Optional
+from typing import Optional, Any, Dict
 # from gym import spaces
 # from gym.utils import seeding
 from sklearn import linear_model
@@ -281,19 +281,22 @@ class BuildingEnvReal(gym.Env):
         # Return the new state, reward, done flag, and info
         return self.state, reward, done,done,info
 
-    def reset(self,*,seed: Optional[int] = None,T_initial: Optional[int] =0,Auto: Optional[bool] =True):
-        super().reset(seed=seed)
+    def reset(self, *, seed: int | None = None, options: dict | None = None
+              ) -> tuple[np.ndarray, dict[str, Any]]:
+        super().reset(seed=seed, options=options)
         """Resets the environment.
         Prepares the environment for the next episode by setting the initial
         temperatures, average temperature, occupancy, and occupower. The initial state
         is constructed by concatenating these variables.
 
         Args:
-            T_initial: initial temperatures of the rooms (default is 0).
-            Auto: boolean flag to set initial temperatures to the target temperatures (default is True).
-
+            seed: seed for resetting the environment. An episode is entirely
+                reproducible no matter the generator used.
+            options: resetting options
+                'verbose': set verbosity level [0-2]
         Returns:
             state: the initial state of the environment.
+            info: information.
         """
         # Initialize the episode counter
         self.epochs = 0
@@ -302,9 +305,9 @@ class BuildingEnvReal(gym.Env):
         self.statelist = []
         self.actionlist=[]
 
-        # Set initial temperatures to target temperatures if Auto is True
-        if Auto==True:
-          T_initial = self.target
+        # Use options to get T_initial or use the default value if not provided
+        T_initial = self.target if options is None else options.get('T_initial', self.target)
+
           # T_initial =np.array([18.24489859, 18.58710076, 18.47719682, 19.11476084, 19.59438163,15.39221207])
           # T_initial = np.random.uniform(21,23, self.roomnum+4)
 
@@ -332,7 +335,7 @@ class BuildingEnvReal(gym.Env):
 
         # Return the initial state and an empty dictionary(for gymnasium grammar)
         return self.state, self._get_info()
-    def _get_info(self, all: bool = False):
+    def _get_info(self, all: bool = False) -> Dict[str, Any]:
         """
         Returns info. See step().
 
@@ -353,8 +356,8 @@ class BuildingEnvReal(gym.Env):
                 'zone_temperature': self.X_new,
                 'reward_breakdown': self._reward_breakdown,
             }
-        return
-    def train(self,states,actions):
+        
+    def train(self, states: np.ndarray, actions: np.ndarray) -> None:
         """Trains the linear regression model using the given states and actions.
         The model is trained to predict the next state based on the current state and action.
         The trained coefficients are stored in the environment for later use.
