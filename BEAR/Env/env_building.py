@@ -31,9 +31,9 @@ class BuildingEnvReal(gym.Env):
                                                          Shape       Min         Max
         Temperature of zones (celsius)                   n           temp_min    temp_max
         Temperature of outdoor (celsius)                 1           temp_min    temp_max
-        Global Horizontal Irradiance (W)                 n           0           heat_max
+        Global Horizontal Irradiance (W)                 1           0           heat_max
         Temperature of ground (celsius)                  1           temp_min    temp_max
-        Occupancy power (W)                              n           0           heat_max
+        Occupancy power (W)                              1           0           heat_max
     Attributes:
         Parameter (dict): Dictionary containing the parameters for the environment.
         observation_space: structure of observations returned by environment
