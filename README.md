@@ -1,5 +1,5 @@
-<p align="center">
-  <img src="Images/LOGO.png" width="400">
+<p align="left">
+  <img src="Images/LOGO.png" width="300">
 </p>
 
 # BEAR
@@ -13,7 +13,7 @@ GitHub Homepage: [**BEAR**](https://drive.google.com/file/d/1waRMSn92azFNuRoMSyl
 
 Thank you for choosing BEAR.
 
-BEAR is a physics based Building Environment for Control And Reinforcement Learning. The platform is intended for building dynamics modeling and building energy management, and it allows researchers to efficiently benchmark both model-based and model-free controllers using a broad collection of standard building models in Python without co-simulation with other building simulators. For implementation convenience, only three elements (building type, weather type, and city) need to be selected by user to create an environment. You can read a detailed presentation of BEAR in our paper:
+BEAR is a physics-based **B**uilding **E**nvironment for Control **A**nd **R**einforcement Learning. The platform is intended for building dynamics modeling and building energy management, and it allows researchers to efficiently benchmark both model-based and model-free (Reinforcement Learning) controllers using a broad collection of standard building models in Python without the need of co-simulation using other building simulators. For implementation convenience, three elements (building type, weather type, and city) can be selected by users to create a customized environment. You can read the detailed presentation of BEAR in our paper:
 
 *Zhang, C., Shi, Y., & Chen, Y. (2022). [**BEAR: Physics-Principled Building Environment for Control and Reinforcement Learning**](https://dl.acm.org/doi/abs/10.1145/3575813.3576877) 14th ACM International Conference on Future Energy Systems (e-Energy). 2023, arXiv. https://doi.org/10.48550/arXiv.2211.14744*
 ## Usage example
@@ -65,13 +65,13 @@ Please report any issues with installation or bugs in the code in the [Issues se
 ## Functionalities
 The main functionalities of **BEAR** are the following :
   - **Create environment**
-  <div align="left">
+  <div align="center">
   <img src="Images/code_r.PNG" width=50%><br><br>
   </div>
   
   - **Building model**
-  <div align="left">
-  <img src="Images/rp19f.PNG" width=80%><br><br>
+  <div align="center">
+  <img src="Images/rp19f.PNG" width=50%><br><br>
   </div>
 
   - **RL testbed**
@@ -88,7 +88,7 @@ BEAR supports a set of user-defined variables as inputs and provides an OpenAI G
 ### Buildings
 For creating a large variety of building models, BEAR includes 16 different types of building at 19 locations. Here are lists of available buildings, weathers, and locations:
 <div align="center">
-  <img src="Images/Inputs.PNG" width=80%><br><br>
+  <img src="Images/Inputs.PNG" width=50%><br><br>
 </div>
 
 ### RL algorithms
