@@ -1,5 +1,5 @@
 <p align="left">
-  <img src="Images/LOGO.png" width="400">
+  <img src="Images/LOGO.png" width="300">
 </p>
 
 # BEAR
