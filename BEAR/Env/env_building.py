@@ -31,9 +31,9 @@ class BuildingEnvReal(gym.Env):
                                                          Shape       Min         Max
         Temperature of zones (celsius)                   n           temp_min    temp_max
         Temperature of outdoor (celsius)                 1           temp_min    temp_max
-        Global Horizontal Irradiance (W)                 1           0           heat_max
+        Global Horizontal Irradiance (W)                 n           0           heat_max
         Temperature of ground (celsius)                  1           temp_min    temp_max
-        Occupancy power (W)                              1           0           heat_max
+        Occupancy power (W)                              n           0           heat_max
     Attributes:
         Parameter (dict): Dictionary containing the parameters for the environment.
         observation_space: structure of observations returned by environment
@@ -128,15 +128,15 @@ class BuildingEnvReal(gym.Env):
         heat_max = 1000
         self.low = np.concatenate([
             np.ones(self.roomnum + 1) * min_T,  # temp of zones and outdoor
-            [0],                          # GHI
+            np.ones(self.roomnum ) * [0],                          # GHI
             [min_T],                      # temp of ground
-            [-min_T * self.OCCU_COEF_LINEAR / 1000]  # occupancy power
+            np.ones(self.roomnum ) * [-min_T * self.OCCU_COEF_LINEAR / 1000]  # occupancy power
         ]).astype(np.float32)
         self.high = np.concatenate([
             np.ones(self.roomnum + 1) * max_T,  # temp of zones and outdoor
-            [heat_max],                     # GHI
+            np.ones(self.roomnum ) * [heat_max],                     # GHI
             [max_T],                      # temp of ground
-            [heat_max]                      # occupancy power
+            np.ones(self.roomnum ) * [heat_max]                      # occupancy power
         ]).astype(np.float32)
         self.observation_space = gym.spaces.Box(self.low, self.high, dtype=np.float32)
 
